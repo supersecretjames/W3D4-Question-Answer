@@ -16,10 +16,28 @@ end
 
 class User
 
-  def self.find_by_id(user_id)
-    # returns first and last name
-    QDatabase.instance.execute("SELECT fname, lname FROM
-    users WHERE id = #{user_id}")
+  attr_accessor :id, :fname, :lname, :is_instructor
+
+  def self.find_by_id(id)
+    result = QDatabase.instance.execute("SELECT *
+                                FROM users
+                                WHERE id = ?", id)
+    User.new(result[0])
+  end
+
+  def initialize(result_array)
+    @id, @fname, @lname, @is_instructor = result_array
+  end
+
+  def average_karma
+    result = QDatabase.instance.execute("SELECT COUNT(question_likes.liker_id) /
+                                                COUNT(questions.id)
+                                         FROM users
+                                         JOIN questions
+                                         ON users.id = author_id
+                                         JOIN question_likes
+                                         ON questions.id = question_id")
+                                         p result
   end
 
 end
@@ -91,6 +109,18 @@ class QuestionAnswer
                                 FROM question_answers
                                 WHERE question_id = ?", id)
     QuestionAnswer.new(result[0]) # returns a temp question object
+  end
+
+  def self.most_replied
+
+    results = QDatabase.instance.execute("SELECT title, COUNT(reply)
+                                FROM question_answers
+                                JOIN questions
+                                ON question_id = id
+                                GROUP BY title
+                                ORDER BY COUNT(reply) Desc")
+
+    "The question '#{results[0][0]}' has the most replies with #{results[0][1]}."
   end
 
   def initialize(result_array)

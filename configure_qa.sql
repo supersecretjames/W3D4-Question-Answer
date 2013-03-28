@@ -56,7 +56,7 @@ INSERT INTO questions ('title','body','author_id')
        ('can someone do a Sling Blade impression?','I like to see that',1);
 
 INSERT INTO question_likes ('question_id', 'liker_id')
-  VALUES (1, 1), (1, 2), (1, 3), (2, 2);
+  VALUES (1, 1), (1, 2), (1, 3), (2, 2), (1, 4);
 
 INSERT INTO question_followers ('question_id', 'follower_id')
   VALUES (1, 1), (1, 2), (2, 1), (2, 2), (2, 3);

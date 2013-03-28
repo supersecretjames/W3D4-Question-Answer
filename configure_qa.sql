@@ -22,7 +22,7 @@ CREATE TABLE question_followers (
   FOREIGN KEY (follower_id) REFERENCES users(id)
 );
 
-CREATE TABLE question_replies (
+CREATE TABLE question_answers (
   question_id INTEGER NOT NULL,
   reply TEXT NOT NULL,
   replier_id INTEGER NOT NULL,
@@ -46,16 +46,21 @@ CREATE TABLE question_likes (
   FOREIGN KEY (liker_id) REFERENCES users(id)
 );
 
-
 INSERT INTO users ('fname', 'lname','is_instructor')
-  VALUES ('Steve', 'Li',0), ('James', 'Yu',0), ('Ned', 'Ruggeri',1);
+  VALUES ('Steve', 'Li',0), ('James', 'Yu',0), ('Ned', 'Ruggeri',1),
+         ('Karl','Childers', 0);
 
 INSERT INTO questions ('title','body','author_id')
   VALUES ('do you like cats?','', 1),
-         ('do you hate dogs?','since cats rule', 2);
+         ('do you hate dogs?','since cats rule', 2),
+       ('can someone do a Sling Blade impression?','I like to see that',1);
 
 INSERT INTO question_likes ('question_id', 'liker_id')
   VALUES (1, 1), (1, 2), (1, 3), (2, 2);
 
 INSERT INTO question_followers ('question_id', 'follower_id')
   VALUES (1, 1), (1, 2), (2, 1), (2, 2), (2, 3);
+
+INSERT INTO question_answers ('question_id', 'reply', 'replier_id')
+  VALUES (2, 'I have a dog, punk.', 3), (1, 'I hate cats.', 2), (1, 'Yes', 3),
+         (3, 'I sure do like them French fried taters.', 4) ;

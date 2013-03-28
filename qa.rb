@@ -82,20 +82,34 @@ end
 
 
 
-class Question_Reply
+class QuestionAnswer
 
   attr_accessor :question_id, :reply, :replier_id
 
   def self.find_by_id(id)
     result = QDatabase.instance.execute("SELECT *
-                                FROM questions
-                                WHERE id = ?", id)
-    Question.new(result[0]) # returns a temp question object
+                                FROM question_answers
+                                WHERE question_id = ?", id)
+    QuestionAnswer.new(result[0]) # returns a temp question object
   end
 
-
+  def initialize(result_array)
+    @question_id, @reply, @replier_id = result_array
+  end
 
   def replies
+    result = QDatabase.instance.execute("SELECT title, reply, fname, lname
+                                FROM question_answers
+                                JOIN users
+                                ON replier_id = users.id
+                                JOIN questions
+                                ON question_id = questions.id
+                                WHERE question_id = ?", question_id)
+   puts "Question: #{result[0][0]}"
+   result.each do |result|
+     p "'#{result[1]}' said #{result[2]} #{result[3]}"
+   end
+   return nil
   end
 
 

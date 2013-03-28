@@ -30,14 +30,18 @@ class User
   end
 
   def average_karma
-    result = QDatabase.instance.execute("SELECT COUNT(question_likes.liker_id) /
-                                                COUNT(questions.id)
-                                         FROM users
-                                         JOIN questions
-                                         ON users.id = author_id
-                                         JOIN question_likes
-                                         ON questions.id = question_id")
-                                         p result
+    result = QDatabase.instance.execute(
+      "SELECT users.fname, users.lname, COUNT(question_likes.liker_id) /
+         (SELECT COUNT(questions.id)
+          FROM questions
+          WHERE author_id = ?)
+      FROM users
+      JOIN questions
+      ON users.id = author_id
+      JOIN question_likes
+      ON questions.id = question_id
+      WHERE users.id = ?", id, id)
+      p "#{result[0][0]} #{result[0][1]} has #{result[0][2]} average karma."
   end
 
 end

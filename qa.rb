@@ -35,6 +35,20 @@ class Question
     Question.new(result[0]) # returns a temp question object
   end
 
+  def self.most_followed(n)
+
+    result = QDatabase.instance.execute("SELECT title, COUNT(follower_id)
+                                         FROM questions JOIN question_followers
+                                         ON id = question_id
+                                         GROUP BY question_id
+                                         ORDER BY COUNT(follower_id) Desc")
+    result[0...n].each do |question|
+      p "'#{question[0]}' has #{question[1]} followers."
+    end
+
+    return nil
+  end
+
   def initialize(result_array)
     @id, @title, @body, @author_id = result_array
   end
@@ -54,13 +68,48 @@ class Question
   end
 
   def followers
-    QDatabase.instance.execute("SELECT user_id
-                                FROM question_followers
+    result = QDatabase.instance.execute("SELECT fname, lname
+                                FROM question_followers JOIN users
+                                ON follower_id = id
                                 WHERE question_id = ?", id)
-
+    result.each do |person|
+      p "#{person[0]} #{person[1]}"
+    end
+    return nil
   end
 
 end
+
+
+
+class Question_Reply
+
+  attr_accessor :question_id, :reply, :replier_id
+
+  def self.find_by_id(id)
+    result = QDatabase.instance.execute("SELECT *
+                                FROM questions
+                                WHERE id = ?", id)
+    Question.new(result[0]) # returns a temp question object
+  end
+
+
+
+  def replies
+  end
+
+
+
+end
+
+
+
+
+
+
+
+
+
 
 class Question_Like
 
@@ -74,8 +123,19 @@ class Question_Follower
 
 end
 
-class Question_Reply
 
-end
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

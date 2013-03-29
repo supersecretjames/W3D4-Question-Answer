@@ -1,3 +1,5 @@
+#Old file no longer in use
+
 require 'singleton'
 require 'sqlite3'
 
@@ -226,15 +228,12 @@ class QuestionAnswer
 end
 
 
-class Question_Like
+class QuestionLike
 
 end
 
-class Question_Action
 
-end
-
-class Question_Follower
+class QuestionFollower
 
 end
 

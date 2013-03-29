@@ -19,7 +19,7 @@ class User
       FROM users
       WHERE id = ?", id)
 
-    User.new(result[0])
+    User.new(result[0]) # Could have used splat here but we went old school.
   end
 
   def initialize(result_array=nil)
@@ -50,7 +50,7 @@ class User
      results.each do |result|
        p result[0]
      end
-     return nil
+     return nil #Purely cosmetic for clean testing in irb.
   end
 
   def replies
@@ -79,7 +79,7 @@ class User
   end
 
   def save(fname, lname)
-    raise "user already saved in database." if @id
+    raise "user already saved in database." if @id #Just say no to dup accounts
 
     QDatabase.instance.execute(
       "INSERT INTO users ('fname','lname','is_instructor')

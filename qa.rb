@@ -9,8 +9,6 @@ class QDatabase < SQLite3::Database
   end
 end
 
-
-
 class User
 
   attr_accessor :fname, :lname, :is_instructor
@@ -65,6 +63,19 @@ class User
       p result[0]
     end
     return nil
+  end
+
+  def most_karma(n)
+    results = QDatabase.instance.execute(
+      "SELECT title, COUNT(liker_id)
+      FROM question_likes
+      JOIN questions
+      ON question_id = id
+      WHERE author_id = ?
+      GROUP BY question_id
+      ORDER BY COUNT(liker_id) Desc", @id)
+
+    results[0...n]
   end
 
   def save(fname, lname)
@@ -153,8 +164,6 @@ class Question
   end
 
 end
-
-
 
 class QuestionAnswer
 

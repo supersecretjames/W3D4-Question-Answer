@@ -79,6 +79,8 @@ class User
   end
 
   def save(fname, lname)
+    raise "user already saved in database." if @id
+
     QDatabase.instance.execute(
       "INSERT INTO users ('fname','lname','is_instructor')
         VALUES (?,?,0)", fname, lname)
@@ -154,6 +156,8 @@ class Question
   end
 
   def save(title, body, author_id)
+    raise "Question already saved in database." if @id
+
     QDatabase.instance.execute(
       "INSERT INTO questions ('title','body','author_id')
         VALUES (?,?,?)", title, body, author_id)
